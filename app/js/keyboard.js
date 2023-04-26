@@ -33,18 +33,18 @@ keyboard.appendChild(keyboardRow5);
 const key = (num) => {
     return `
     <div class="keyboard--key key ${num.name}">
-        <span class="rus hidden">
+        <div class="rus hidden">
             <span class="caseDown hidden">${num.caseDownRu}</span>
             <span class="caseUp hidden">${num.caseUpRu}</span>
             <span class="caps hidden">${num.capsRu}</span>
             <span class="shiftCaps hidden">${num.shiftCapsRu}</span>
-        </span>
-        <span class="eng">
-            <span class="caseDown">${num.caseDownEn}<span>
+        </div>
+        <div class="eng">
+            <span class="caseDown">${num.caseDownEn}</span>
             <span class="caseUp hidden">${num.caseUpEn}</span>
             <span class="caps hidden">${num.capsEn}</span>
             <span class="shiftCaps hidden">${num.shiftCaps}</span>
-        </span>
+        </div>
     </div>
     `;
 };
@@ -62,5 +62,46 @@ const createListWithInnerHTML = (row1, row2, row3, row4, row5) => {
     keyboardRow5.innerHTML = rows5;
 };
 
-
 createListWithInnerHTML(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
+
+function getCaretPos(obj) {
+    obj.focus();
+    if(obj.selectionStart) return obj.selectionStart;
+    else if (document.selection) {
+        var sel = document.selection.createRange();
+        var clone = sel.duplicate();
+        sel.collapse(true);
+        clone.moveToElementText(obj);
+        clone.setEndPoint('EndToEnd', sel);
+        return clone.text.length;
+    }
+    return 0;
+}
+function cleanForm() {
+    // document.getElementById('cs').value = getCaretPos(textarea);
+    // console.log(getCaretPos(textarea));
+    // setTimeout((cleanForm()), 100);
+}
+
+body.addEventListener('click', function () {
+    getCaretPos(textarea);
+});
+
+keyboard.addEventListener('click', function (e) {
+    if(e.target.textContent == 'Backspace'){
+        const curr = getCaretPos(textarea);
+        textarea.value = textarea.value.substring(0,curr - 1) +
+                         textarea.value.substring(curr, textarea.length);
+                         textarea.setSelectionRange(curr-1,curr-1);
+        return;
+    }
+    if(e.target.textContent == 'Del'){
+        const curr = getCaretPos(textarea);
+        textarea.value = textarea.value.substring(0,curr ) +
+                         textarea.value.substring(curr + 1, textarea.length);
+                         textarea.setSelectionRange(curr,curr);
+        return;
+    }
+    textarea.value += e.target.textContent;
+});
+
