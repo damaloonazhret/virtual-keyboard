@@ -52,7 +52,7 @@ const key = (num) => {
         return `
     <div class="keyboard--key key ${num.name}">
         <div class="eng">
-            <span class="caseDown">${num.caseDownEn}</span>
+            <span class="caseDownConst">${num.caseDownEn}</span>
         </div>
     </div>
     `;
@@ -71,11 +71,11 @@ const key = (num) => {
 };
 
 const keyRu = (num) => {
-    if (num.capsEn === num.caseDownRu) {
+    if (num.shiftCaps === num.caseDownRu) {
         return `
     <div class="keyboard--key key ${num.name}">
         <div class="eng">
-            <span class="caseDown">${num.caseDownEn}</span>
+            <span class="caseDownConst">${num.caseDownEn}</span>
         </div>
     </div>
     `;
@@ -162,24 +162,30 @@ keyboard.addEventListener('click', function (e) {
         textarea.setSelectionRange(curr, curr);
         return;
     }
-    if (e.target.textContent === "Shift") {
-        if (keyboardKey.className == 'eng') {
-            createListWithInnerHTMLRus(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
-        }
-        if (keyboardKey.className == 'rus') {
-            createListWithInnerHTML(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
-        }
-        return;
-    }
-    if (e.target.tagName === 'SPAN') {
+    // if (e.target.textContent === "Shift") {
+    //     if (keyboardKey.className == 'eng') {
+    //         createListWithInnerHTMLRus(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
+    //     }
+    //     if (keyboardKey.className == 'rus') {
+    //         createListWithInnerHTML(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
+    //     }
+    //     return;
+    // }
+    if (e.target.tagName === 'SPAN' && e.target.textContent.length === 1) {
         textarea.value += e.target.textContent;
+        console.log(e.target)
     }
-    console.log(e.target);
+    // console.log(e.target);
 });
 
-body.addEventListener('keydown', function (e){
+body.addEventListener('keydown', function (e) {
+    e.preventDefault();
+    console.log(e.code);
     const key = document.querySelector(`.${e.code}`);
-    key.classList.add('active');
+    console.log(key);
+    if (key !== null) {
+        key.classList.add('active');
+    }
     if (e.code == 'Backspace') {
         const curr = getCaretPos(textarea);
         textarea.value = textarea.value.substring(0, curr - 1) +
@@ -194,21 +200,53 @@ body.addEventListener('keydown', function (e){
         textarea.setSelectionRange(curr, curr);
         return;
     }
-    if(e.code === 'ShiftLeft' || e.code === 'AltLeft'){
+    if (e.code == 'ShiftLeft' || e.code == 'ShiftRight') {
+
+        document.querySelectorAll('.caseUp ').forEach(el => {
+            el.classList.remove('hidden');
+        });
+        document.querySelectorAll('.caseDown ').forEach(el => {
+            el.classList.add('hidden');
+        });
+    }
+    if (e.code === 'ShiftLeft' || e.code === 'AltLeft' || e.code == 'ShiftRight') {
         return;
     }
-    textarea.value += e.key;
+    if (e.code === 'ArrowLeft'){
+        let curr = getCaretPos(textarea);
+        console.log(curr);
+        textarea.selectionEnd  = (curr - 1);
+    }
+    if (e.code === 'ArrowRight'){
+        let curr = getCaretPos(textarea);
+        console.log(curr);
+        textarea.selectionStart = (curr + 1);
+    }
+    if (e.key.length === 1) {
+        textarea.value += e.key;
+    }
+
 });
 
-body.addEventListener('keyup', function (e){
+body.addEventListener('keyup', function (e) {
     const key = document.querySelector(`.${e.code}`);
-    key.classList.remove('active');
+    if (key !== null) {
+        key.classList.remove('active');
+    }
+    if (e.code == 'ShiftLeft' || e.code == 'ShiftRight') {
+        document.querySelectorAll('.caseUp ').forEach(el => {
+            el.classList.add('hidden');
+        });
+        document.querySelectorAll('.caseDown ').forEach(el => {
+            el.classList.remove('hidden');
+        });
+    }
 });
 
 function runOnKeys(func, ...codes) {
     let pressed = new Set();
 
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function (event) {
         pressed.add(event.code);
 
         for (let code of codes) { // все ли клавиши из набора нажаты?
@@ -220,14 +258,13 @@ function runOnKeys(func, ...codes) {
         func();
     });
 
-    document.addEventListener('keyup', function(event) {
+    document.addEventListener('keyup', function (event) {
         pressed.delete(event.code);
     });
 
 }
 
 runOnKeys(
-
     () => {
         const keyboardKey = document.querySelector('.keyboard--key div');
         if (keyboardKey.className == 'eng') {
