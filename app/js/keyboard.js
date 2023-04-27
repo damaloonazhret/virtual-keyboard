@@ -31,19 +31,62 @@ keyboard.appendChild(keyboardRow4);
 keyboard.appendChild(keyboardRow5);
 
 const key = (num) => {
+    // if (num.name === 'Tab' ||
+    //     num.name === 'Delete' ||
+    //     num.name === 'Backspace' ||
+    //     num.name === 'Enter' ||
+    //     num.name === 'ShiftRight' ||
+    //     num.name === 'ShiftLeft' ||
+    //     num.name === 'ControlLeft' ||
+    //     num.name === 'MetaLeft' ||
+    //     num.name === 'AltLeft' ||
+    //     num.name === 'AltRight' ||
+    //     num.name === 'ControlRight' ||
+    //     num.name === 'CapsLock' ||
+    //     num.name === 'ArrowDown' ||
+    //     num.name === 'ArrowUp' ||
+    //     num.name === 'ArrowRight' ||
+    //     num.name === 'ArrowLeft' ||
+    //     num.name === 'Space'){
+    if (num.shiftCaps === num.caseDownRu) {
+        return `
+    <div class="keyboard--key key ${num.name}">
+        <div class="eng">
+            <span class="caseDown">${num.caseDownEn}</span>
+        </div>
+    </div>
+    `;
+    }
+
     return `
     <div class="keyboard--key key ${num.name}">
-        <div class="rus hidden">
-            <span class="caseDown hidden">${num.caseDownRu}</span>
-            <span class="caseUp hidden">${num.caseUpRu}</span>
-            <span class="caps hidden">${num.capsRu}</span>
-            <span class="shiftCaps hidden">${num.shiftCapsRu}</span>
-        </div>
         <div class="eng">
             <span class="caseDown">${num.caseDownEn}</span>
             <span class="caseUp hidden">${num.caseUpEn}</span>
             <span class="caps hidden">${num.capsEn}</span>
             <span class="shiftCaps hidden">${num.shiftCaps}</span>
+        </div>
+    </div>
+    `;
+};
+
+const keyRu = (num) => {
+    if (num.capsEn === num.caseDownRu) {
+        return `
+    <div class="keyboard--key key ${num.name}">
+        <div class="eng">
+            <span class="caseDown">${num.caseDownEn}</span>
+        </div>
+    </div>
+    `;
+    }
+    return `
+    <div class="keyboard--key key ${num.name}">
+        <div class="rus">
+            <span class="caseDown">${num.caseDownRu}</span>
+            <span class="caseUp hidden">${num.caseUpRu}</span>
+            <span class="caps hidden">${num.capsRu}</span>
+            <span class="shiftCaps hidden">${num.shiftCapsRu}</span>
         </div>
     </div>
     `;
@@ -64,44 +107,136 @@ const createListWithInnerHTML = (row1, row2, row3, row4, row5) => {
 
 createListWithInnerHTML(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
 
+
+const createListWithInnerHTMLRus = (row1, row2, row3, row4, row5) => {
+    const rows1 = row1.map(keyRu).join(' ');
+    const rows2 = row2.map(keyRu).join(' ');
+    const rows3 = row3.map(keyRu).join(' ');
+    const rows4 = row4.map(keyRu).join(' ');
+    const rows5 = row5.map(keyRu).join(' ');
+    keyboardRow.innerHTML = rows1;
+    keyboardRow2.innerHTML = rows2;
+    keyboardRow3.innerHTML = rows3;
+    keyboardRow4.innerHTML = rows4;
+    keyboardRow5.innerHTML = rows5;
+};
+
+
 function getCaretPos(obj) {
     obj.focus();
-    if(obj.selectionStart) return obj.selectionStart;
-    else if (document.selection) {
-        var sel = document.selection.createRange();
-        var clone = sel.duplicate();
-        sel.collapse(true);
-        clone.moveToElementText(obj);
-        clone.setEndPoint('EndToEnd', sel);
-        return clone.text.length;
-    }
+    if (obj.selectionStart) return obj.selectionStart;
+    // else if (document.selection) {
+    //     let sel = document.selection.createRange();
+    //     // let clone = sel.duplicate();
+    //     sel.collapse(true);
+    //     // clone.moveToElementText(obj);
+    //     // clone.setEndPoint('EndToEnd', sel);
+    //     // console.log(clone);
+    //     // return clone.text.length;
+    // }
     return 0;
 }
-function cleanForm() {
-    // document.getElementById('cs').value = getCaretPos(textarea);
-    // console.log(getCaretPos(textarea));
-    // setTimeout((cleanForm()), 100);
-}
 
-body.addEventListener('click', function () {
-    getCaretPos(textarea);
-});
+
+// body.addEventListener('click', function () {
+//     getCaretPos(textarea);
+// });
+
+const eng = document.querySelectorAll('.eng');
+const rus = document.querySelectorAll('.rus');
+
 
 keyboard.addEventListener('click', function (e) {
-    if(e.target.textContent == 'Backspace'){
+    const keyboardKey = document.querySelector('.keyboard--key div');
+    if (e.target.textContent == 'Backspace') {
         const curr = getCaretPos(textarea);
-        textarea.value = textarea.value.substring(0,curr - 1) +
-                         textarea.value.substring(curr, textarea.length);
-                         textarea.setSelectionRange(curr-1,curr-1);
+        textarea.value = textarea.value.substring(0, curr - 1) +
+            textarea.value.substring(curr, textarea.length);
+        textarea.setSelectionRange(curr - 1, curr - 1);
         return;
     }
-    if(e.target.textContent == 'Del'){
+    if (e.target.textContent == 'Del') {
         const curr = getCaretPos(textarea);
-        textarea.value = textarea.value.substring(0,curr ) +
-                         textarea.value.substring(curr + 1, textarea.length);
-                         textarea.setSelectionRange(curr,curr);
+        textarea.value = textarea.value.substring(0, curr) +
+            textarea.value.substring(curr + 1, textarea.length);
+        textarea.setSelectionRange(curr, curr);
         return;
     }
-    textarea.value += e.target.textContent;
+    if (e.target.textContent === "Shift") {
+        if (keyboardKey.className == 'eng') {
+            createListWithInnerHTMLRus(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
+        }
+        if (keyboardKey.className == 'rus') {
+            createListWithInnerHTML(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
+        }
+        return;
+    }
+    if (e.target.tagName === 'SPAN') {
+        textarea.value += e.target.textContent;
+    }
+    console.log(e.target);
 });
 
+body.addEventListener('keydown', function (e){
+    const key = document.querySelector(`.${e.code}`);
+    key.classList.add('active');
+    if (e.code == 'Backspace') {
+        const curr = getCaretPos(textarea);
+        textarea.value = textarea.value.substring(0, curr - 1) +
+            textarea.value.substring(curr, textarea.length);
+        textarea.setSelectionRange(curr - 1, curr - 1);
+        return;
+    }
+    if (e.code == 'Del') {
+        const curr = getCaretPos(textarea);
+        textarea.value = textarea.value.substring(0, curr) +
+            textarea.value.substring(curr + 1, textarea.length);
+        textarea.setSelectionRange(curr, curr);
+        return;
+    }
+    if(e.code === 'ShiftLeft' || e.code === 'AltLeft'){
+        return;
+    }
+    textarea.value += e.key;
+});
+
+body.addEventListener('keyup', function (e){
+    const key = document.querySelector(`.${e.code}`);
+    key.classList.remove('active');
+});
+
+function runOnKeys(func, ...codes) {
+    let pressed = new Set();
+
+    document.addEventListener('keydown', function(event) {
+        pressed.add(event.code);
+
+        for (let code of codes) { // все ли клавиши из набора нажаты?
+            if (!pressed.has(code)) {
+                return;
+            }
+        }
+        pressed.clear();
+        func();
+    });
+
+    document.addEventListener('keyup', function(event) {
+        pressed.delete(event.code);
+    });
+
+}
+
+runOnKeys(
+
+    () => {
+        const keyboardKey = document.querySelector('.keyboard--key div');
+        if (keyboardKey.className == 'eng') {
+            createListWithInnerHTMLRus(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
+        }
+        if (keyboardKey.className == 'rus') {
+            createListWithInnerHTML(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
+        }
+    },
+    "ShiftLeft",
+    "AltLeft"
+);

@@ -377,7 +377,7 @@ const capsRow = [
         caseUpEn: 'F',
         capsEn: 'F',
         shiftCaps: 'f',
-        name: 'KayF',
+        name: 'KeyF',
     },
     {
         caseDownRu: 'п',
@@ -388,7 +388,7 @@ const capsRow = [
         caseUpEn: 'G',
         capsEn: 'G',
         shiftCaps: 'g',
-        name: 'kayG',
+        name: 'KeyG',
     },
     {
         caseDownRu: 'р',
@@ -421,7 +421,7 @@ const capsRow = [
         caseUpEn: 'K',
         capsEn: 'K',
         shiftCaps: 'k',
-        name: 'keyK',
+        name: 'KeyK',
     },
     {
         caseDownRu: 'д',
