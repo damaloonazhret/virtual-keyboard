@@ -129,7 +129,7 @@ const numsRow = [
         caseUpEn: '_',
         capsEn: '-',
         shiftCaps: '_',
-        name: 'minus',
+        name: 'Minus',
     },
     {
         caseDownRu: '=',
@@ -140,7 +140,7 @@ const numsRow = [
         caseUpEn: '+',
         capsEn: '=',
         shiftCaps: '+',
-        name: 'equal',
+        name: 'Equal',
     },
     {
         caseDownRu: 'Backspace',
