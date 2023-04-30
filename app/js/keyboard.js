@@ -34,23 +34,6 @@ keyboard.appendChild(keyboardRow5);
 textarea.focus();
 
 const key = (num) => {
-    // if (num.name === 'Tab' ||
-    //     num.name === 'Delete' ||
-    //     num.name === 'Backspace' ||
-    //     num.name === 'Enter' ||
-    //     num.name === 'ShiftRight' ||
-    //     num.name === 'ShiftLeft' ||
-    //     num.name === 'ControlLeft' ||
-    //     num.name === 'MetaLeft' ||
-    //     num.name === 'AltLeft' ||
-    //     num.name === 'AltRight' ||
-    //     num.name === 'ControlRight' ||
-    //     num.name === 'CapsLock' ||
-    //     num.name === 'ArrowDown' ||
-    //     num.name === 'ArrowUp' ||
-    //     num.name === 'ArrowRight' ||
-    //     num.name === 'ArrowLeft' ||
-    //     num.name === 'Space'){
     if (num.shiftCaps === num.caseDownRu) {
         return `
     <div class="keyboard--key key ${num.name}">
@@ -155,31 +138,6 @@ const createListWithInnerHTMLRus = (row1, row2, row3, row4, row5) => {
     keyboardRow5.innerHTML = rows5;
 };
 
-// const createListWithInnerHTMLRusChange = (row1, row2, row3, row4, row5) => {
-//     const rows1 = row1.map(keyRuChange).join(' ');
-//     const rows2 = row2.map(keyRuChange).join(' ');
-//     const rows3 = row3.map(keyRuChange).join(' ');
-//     const rows4 = row4.map(keyRuChange).join(' ');
-//     const rows5 = row5.map(keyRuChange).join(' ');
-//     keyboardRow.innerHTML = rows1;
-//     keyboardRow2.innerHTML = rows2;
-//     keyboardRow3.innerHTML = rows3;
-//     keyboardRow4.innerHTML = rows4;
-//     keyboardRow5.innerHTML = rows5;
-// };
-//
-// const createListWithInnerHTMLChange = (row1, row2, row3, row4, row5) => {
-//     const rows1 = row1.map(keyChange).join(' ');
-//     const rows2 = row2.map(keyChange).join(' ');
-//     const rows3 = row3.map(keyChange).join(' ');
-//     const rows4 = row4.map(keyChange).join(' ');
-//     const rows5 = row5.map(keyChange).join(' ');
-//     keyboardRow.innerHTML = rows1;
-//     keyboardRow2.innerHTML = rows2;
-//     keyboardRow3.innerHTML = rows3;
-//     keyboardRow4.innerHTML = rows4;
-//     keyboardRow5.innerHTML = rows5;
-// };
 
 
 function getCaretPos(obj) {
@@ -196,11 +154,6 @@ function getCaretPos(obj) {
     // }
     return 0;
 }
-
-
-// body.addEventListener('click', function () {
-//     getCaretPos(textarea);
-// });
 
 const eng = document.querySelectorAll('.eng');
 const rus = document.querySelectorAll('.rus');
@@ -223,8 +176,16 @@ keyboard.addEventListener('click', function (e) {
         return;
     }
     if (e.target.textContent == 'CapsLock') {
-        // console.log(e.target.className);
         document.querySelector(`.${e.target.className}`).classList.add('active');
+    }
+    if (e.target.textContent == 'Shift'){
+        console.log(document.querySelectorAll('.caseUp '));
+        document.querySelectorAll('.caseUp ').forEach(el => {
+            el.classList.remove('hidden');
+        });
+        document.querySelectorAll('.caseDown ').forEach(el => {
+            el.classList.add('hidden');
+        });
     }
     if (e.target.textContent == 'Enter'){
         textarea.focus();
@@ -239,8 +200,26 @@ keyboard.addEventListener('click', function (e) {
     }
     if (e.target.textContent == '►') {
         let curr = getCaretPos(textarea);
-        // console.log(curr);
         textarea.selectionStart = (curr + 1);
+        return;
+    }
+    if (e.target.textContent == '▼') {
+        let width = textarea.offsetWidth;
+        let curr = getCaretPos(textarea);
+        console.log(textarea.offsetWidth)
+        console.log(textarea.clientWidth)
+        if(textarea.value.length > (width/12.41)){
+            textarea.selectionStart = ((curr)+((Math.floor(width/12.41))));
+        }
+        return;
+    }
+    if (e.target.textContent == '▲') {
+        let width = textarea.offsetWidth;
+        let curr = getCaretPos(textarea);
+        console.log(textarea.getClientRects())
+        if(textarea.value.length > (width/12.41) && curr > (width/12.41)){
+            textarea.selectionEnd = ((curr)-((Math.floor(width/12.41))));
+        }
         return;
     }
     if (e.target.textContent == 'Tab'){
@@ -248,9 +227,7 @@ keyboard.addEventListener('click', function (e) {
     }
     if (e.target.tagName === 'SPAN' && e.target.textContent.length === 1) {
         textarea.value += e.target.textContent;
-        // console.log(e.target)
     }
-    // console.log(e.target);
 });
 
 document.onclick = function(event) {
@@ -259,10 +236,7 @@ document.onclick = function(event) {
 
 body.addEventListener('keydown', function (e) {
     let curr = getCaretPos(textarea);
-    e.preventDefault();
-    // console.log(e.code);
     const key = document.querySelector(`.${e.code}`);
-    // console.log(key);
     if (key !== null) {
         key.classList.add('active');
     }
@@ -295,8 +269,21 @@ body.addEventListener('keydown', function (e) {
     if (e.code === 'ArrowRight') {
         textarea.selectionStart = (curr + 1);
     }
+    if (e.code === 'ArrowDown') {
+        let width = textarea.offsetWidth;
+        let curr = getCaretPos(textarea);
+        if(textarea.value.length > (width/12.41)){
+            textarea.selectionStart = ((curr)+(Math.floor(width/12.41)));
+        }
+    }
+    if (e.code === 'ArrowUp') {
+        let width = textarea.offsetWidth;
+        let curr = getCaretPos(textarea);
+        if(textarea.value.length > (width/12.41) && curr > (width/12.41)){
+            textarea.selectionEnd = ((curr)-(Math.floor(width/12.41)));
+        }
+    }
     if (e.code === 'Enter'){
-        console.log('enter');
         textarea.value = textarea.value.substring(0, curr) + '\n' +
             textarea.value.substring(curr, textarea.length);
         textarea.setSelectionRange(curr+1, curr+1);

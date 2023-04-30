@@ -4,6 +4,8 @@
   height: 150px;
   margin: 20px auto 20px;
   font-size: 22px;
+  resize: none;
+  &::-webkit-scrollbar {width:0px;}
 }
 
 input[type="text"], textarea {
