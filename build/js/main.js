@@ -738,6 +738,8 @@ keyboardRow3.className = 'keyboard--row row';
 keyboardRow4.className = 'keyboard--row row';
 keyboardRow5.className = 'keyboard--row row';
 
+textarea.setAttribute('spellcheck', 'false');
+
 body.appendChild(header);
 body.appendChild(main);
 main.appendChild(textarea);
@@ -747,7 +749,6 @@ keyboard.appendChild(keyboardRow2);
 keyboard.appendChild(keyboardRow3);
 keyboard.appendChild(keyboardRow4);
 keyboard.appendChild(keyboardRow5);
-
 
 textarea.focus();
 
@@ -796,79 +797,70 @@ const keyRu = (num) => {
     `;
 };
 
-const keyChange = (num) => {
-    if (num.shiftCaps !== num.caseDownRu) {
-        return `
-    <div class="keyboard--key key ${num.name}">
-        <div class="eng">
-            <span class="caseDown">${num.caseDownEn}</span>
-            <span class="caseUp hidden">${num.caseUpEn}</span>
-            <span class="caps hidden">${num.capsEn}</span>
-            <span class="shiftCaps hidden">${num.shiftCaps}</span>
-        </div>
-    </div>
-    `;
+class KeyRus {
+
+    constructor(num) {
+        this.num = num;
     }
+
+    create() {
+        let buranRus = this.num.map(keyRu).join(' ');
+        return buranRus;
+    }
+
+}
+
+class KeyEn {
+
+    constructor(num) {
+        this.num = num;
+    }
+
+    create() {
+        let buran = this.num.map(key).join(' ');
+        return buran;
+    }
+
+}
+
+const insertHTML = (rows1, rows2, rows3, rows4, rows5) => {
+    keyboardRow.innerHTML = rows1;
+    keyboardRow2.innerHTML = rows2;
+    keyboardRow3.innerHTML = rows3;
+    keyboardRow4.innerHTML = rows4;
+    keyboardRow5.innerHTML = rows5;
 };
 
-const keyRuChange = (num) => {
-    if (num.shiftCaps !== num.caseDownRu) {
-        return `
-    <div class="keyboard--key key ${num.name}">
-        <div class="rus">
-            <span class="caseDown">${num.caseDownRu}</span>
-            <span class="caseUp hidden">${num.caseUpRu}</span>
-            <span class="caps hidden">${num.capsRu}</span>
-            <span class="shiftCaps hidden">${num.shiftCapsRu}</span>
-        </div>
-    </div>
-    `;
-    }
+const createListWithInnerHTMLRus = (row1, row2, row3, row4, row5) => {
+
+    let rows1 = new KeyRus(row1).create();
+    let rows2 = new KeyRus(row2).create();
+    let rows3 = new KeyRus(row3).create();
+    let rows4 = new KeyRus(row4).create();
+    let rows5 = new KeyRus(row5).create();
+
+    insertHTML(rows1, rows2, rows3, rows4, rows5);
 
 };
 
 const createListWithInnerHTML = (row1, row2, row3, row4, row5) => {
-    const rows1 = row1.map(key).join(' ');
-    const rows2 = row2.map(key).join(' ');
-    const rows3 = row3.map(key).join(' ');
-    const rows4 = row4.map(key).join(' ');
-    const rows5 = row5.map(key).join(' ');
-    keyboardRow.innerHTML = rows1;
-    keyboardRow2.innerHTML = rows2;
-    keyboardRow3.innerHTML = rows3;
-    keyboardRow4.innerHTML = rows4;
-    keyboardRow5.innerHTML = rows5;
+
+    let rows1 = new KeyEn(row1).create();
+    let rows2 = new KeyEn(row2).create();
+    let rows3 = new KeyEn(row3).create();
+    let rows4 = new KeyEn(row4).create();
+    let rows5 = new KeyEn(row5).create();
+
+    insertHTML(rows1, rows2, rows3, rows4, rows5);
+
 };
 
-createListWithInnerHTML(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
 
-
-const createListWithInnerHTMLRus = (row1, row2, row3, row4, row5) => {
-    const rows1 = row1.map(keyRu).join(' ');
-    const rows2 = row2.map(keyRu).join(' ');
-    const rows3 = row3.map(keyRu).join(' ');
-    const rows4 = row4.map(keyRu).join(' ');
-    const rows5 = row5.map(keyRu).join(' ');
-    keyboardRow.innerHTML = rows1;
-    keyboardRow2.innerHTML = rows2;
-    keyboardRow3.innerHTML = rows3;
-    keyboardRow4.innerHTML = rows4;
-    keyboardRow5.innerHTML = rows5;
-};
-
+createListWithInnerHTMLRus(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
 
 function getCaretPos(obj) {
     obj.focus();
     if (obj.selectionStart) return obj.selectionStart;
-    // else if (document.selection) {
-    //     let sel = document.selection.createRange();
-    //     // let clone = sel.duplicate();
-    //     sel.collapse(true);
-    //     // clone.moveToElementText(obj);
-    //     // clone.setEndPoint('EndToEnd', sel);
-    //     // console.log(clone);
-    //     // return clone.text.length;
-    // }
     return 0;
 }
 
@@ -877,75 +869,107 @@ const rus = document.querySelectorAll('.rus');
 
 
 keyboard.addEventListener('click', function (e) {
-    if (e.target.textContent.trim() == 'Backspace') {
-        const curr = getCaretPos(textarea);
-        textarea.value = textarea.value.substring(0, curr - 1) +
-            textarea.value.substring(curr, textarea.length);
-        textarea.setSelectionRange(curr - 1, curr - 1);
-        return;
-    }
-    if (e.target.textContent.trim() == 'Del') {
-        const curr = getCaretPos(textarea);
-        textarea.value = textarea.value.substring(0, curr) +
-            textarea.value.substring(curr + 1, textarea.length);
-        textarea.setSelectionRange(curr, curr);
-        return;
-    }
-    if (e.target.textContent.trim() == 'CapsLock') {
-        document.querySelector(`.${e.target.className}`).classList.add('active');
-    }
-    if (e.target.textContent.trim() == 'Shift') {
-        document.querySelectorAll('.caseUp ').forEach(el => {
-            el.classList.remove('hidden');
-        });
-        document.querySelectorAll('.caseDown ').forEach(el => {
-            el.classList.add('hidden');
-        });
-    }
-    if (e.target.textContent.trim() == 'Enter') {
-        textarea.focus();
-        textarea.value += '\n';
-    }
-    if (e.target.textContent.trim() == '◄') {
-        let curr = getCaretPos(textarea);
-        textarea.selectionEnd = (curr - 1);
-        return;
-    }
-    if (e.target.textContent.trim() == '►') {
-        let curr = getCaretPos(textarea);
-        textarea.selectionStart = (curr + 1);
-        return;
-    }
-    if (e.target.textContent.trim() == '▼') {
-        let width = textarea.offsetWidth;
-        let curr = getCaretPos(textarea);
-        if (textarea.value.length > (width / 12.41)) {
-            textarea.selectionStart = ((curr) + ((Math.floor(width / 12.41))));
+    e.preventDefault();
+    let width = textarea.offsetWidth;
+    let curr = getCaretPos(textarea);
+    switch (e.target.textContent.trim()) {
+        case 'Backspace' : {
+            textarea.value = textarea.value.substring(0, curr - 1) +
+                textarea.value.substring(curr, textarea.length);
+            textarea.setSelectionRange(curr - 1, curr - 1);
+            return;
         }
-        return;
-    }
-    if (e.target.textContent.trim() == '▲') {
-        let width = textarea.offsetWidth;
-        let curr = getCaretPos(textarea);
-        if (textarea.value.length > (width / 12.41) && curr > (width / 12.41)) {
-            textarea.selectionEnd = ((curr) - ((Math.floor(width / 12.41))));
+        case 'Del': {
+            textarea.value = textarea.value.substring(0, curr) +
+                textarea.value.substring(curr + 1, textarea.length);
+            textarea.setSelectionRange(curr, curr);
+            return;
         }
-        return;
+        case 'Enter': {
+            textarea.focus();
+            textarea.value += '\n';
+            return;
+        }
+        case '◄': {
+            textarea.selectionEnd = (curr - 1);
+            return;
+        }
+        case '►': {
+            textarea.selectionStart = (curr + 1);
+            return;
+        }
+        case '▼': {
+            if (textarea.value.length > (width / 12.41)) {
+                textarea.selectionStart = ((curr) + ((Math.floor(width / 12.41))));
+            }
+            return;
+        }
+        case '▲': {
+            if (textarea.value.length > (width / 12.41) && curr > (width / 12.41)) {
+                textarea.selectionEnd = ((curr) - ((Math.floor(width / 12.41))));
+            }
+            return;
+        }
+        case 'Tab': {
+            textarea.value += '\t';
+            return;
+        }
+        default: {
+            // if (e.target.tagName === 'SPAN' && e.target.textContent.length === 1) {
+            if (true) {
+                console.log(e.target.textContent.trim())
+                // let aezakmi = document.querySelectorAll(`.${e.code} div span`);
+                // let keyCurr;
+                // aezakmi.forEach((el) => {
+                //     if (el.classList.contains('hidden')) {
+                //         return;
+                //     }
+                //     keyCurr = el.textContent;
+                // });
+                // textarea.value = textarea.value.substring(0, curr) + keyCurr +
+                //     textarea.value.substring(curr, textarea.length);
+                // textarea.setSelectionRange(curr + 1, curr + 1);
+            }
+        }
     }
-    if (e.target.textContent.trim() == 'Tab') {
-        textarea.value += '\t';
+});
+let shiftPress = '';
+const shiftCaps = (e) => {
+    if (shiftPress !== e.code) {
+        shiftPress = e.code;
+        if (e.target.textContent.trim() == 'Shift' ||
+            e.code == "ShiftLeft" ||
+            e.code == 'ShiftRight') {
+            document.querySelectorAll('.caseUp ').forEach(el => {
+                el.classList.toggle('hidden');
+            });
+            document.querySelectorAll('.caseDown ').forEach(el => {
+                el.classList.toggle('hidden');
+            });
+        }
     }
-    if (e.target.tagName === 'SPAN' && e.target.textContent.length === 1) {
-        textarea.value += e.target.textContent;
-    }
+
+};
+
+keyboard.addEventListener('mousedown', function (e) {
+    shiftPress = '';
+    shiftCaps(e);
+});
+
+keyboard.addEventListener('mouseup', function (e) {
+    shiftPress = '';
+    shiftCaps(e);
 });
 
 document.onclick = function (event) {
     textarea.focus();
 };
+
 let pressBtn = '';
 body.addEventListener('keydown', function (e) {
+
     e.preventDefault();
+
     if (pressBtn !== e.code) {
         if (e.code == 'CapsLock') {
             let caps = document.querySelector(`.${e.code}`);
@@ -960,86 +984,98 @@ body.addEventListener('keydown', function (e) {
             return;
         }
     }
+
     let curr = getCaretPos(textarea);
     const key = document.querySelector(`.${e.code}`);
+    let width = textarea.offsetWidth;
+
     if (key !== null && key.textContent.trim() !== 'CapsLock') {
         key.classList.add('active');
     }
 
-    if (e.code == 'Backspace') {
-        textarea.value = textarea.value.substring(0, curr - 1) +
-            textarea.value.substring(curr, textarea.length);
-        textarea.setSelectionRange(curr - 1, curr - 1);
-        return;
-    }
-    console.log(e.code)
-    if (e.code == 'Delete') {
-        console.log('asd')
-        textarea.value = textarea.value.substring(0, curr) +
-            textarea.value.substring(curr + 1, textarea.length);
-        textarea.setSelectionRange(curr, curr);
-        return;
-    }
-    if (e.code == 'ShiftLeft' || e.code == 'ShiftRight') {
-        document.querySelectorAll('.caseUp ').forEach(el => {
-            el.classList.remove('hidden');
-        });
-        document.querySelectorAll('.caseDown ').forEach(el => {
-            el.classList.add('hidden');
-        });
-    }
-    if (e.code === 'ShiftLeft' || e.code === 'AltLeft' || e.code == 'ShiftRight') {
-        return;
-    }
-    if (e.code === 'ArrowLeft') {
-        textarea.selectionEnd = (curr - 1);
-    }
-    if (e.code === 'ArrowRight') {
-        textarea.selectionStart = (curr + 1);
-    }
-    if (e.code === 'ArrowDown') {
-        let width = textarea.offsetWidth;
-        let curr = getCaretPos(textarea);
-        if (textarea.value.length > (width / 12.41)) {
-            textarea.selectionStart = ((curr) + (Math.floor(width / 12.41)));
+
+    switch (e.code) {
+        case 'Backspace': {
+            textarea.value = textarea.value.substring(0, curr - 1) +
+                textarea.value.substring(curr, textarea.length);
+            textarea.setSelectionRange(curr - 1, curr - 1);
+            return;
         }
-    }
-    if (e.code === 'ArrowUp') {
-        let width = textarea.offsetWidth;
-        let curr = getCaretPos(textarea);
-        if (textarea.value.length > (width / 12.41) && curr > (width / 12.41)) {
-            textarea.selectionEnd = ((curr) - (Math.floor(width / 12.41)));
+        case 'Delete': {
+            textarea.value = textarea.value.substring(0, curr) +
+                textarea.value.substring(curr + 1, textarea.length);
+            textarea.setSelectionRange(curr, curr);
+            return;
         }
-    }
-    if (e.code === 'Enter') {
-        textarea.value = textarea.value.substring(0, curr) + '\n' +
-            textarea.value.substring(curr, textarea.length);
-        textarea.setSelectionRange(curr + 1, curr + 1);
-    }
-    if (e.code == 'Tab') {
-        textarea.value = textarea.value.substring(0, curr) + '\t' +
-            textarea.value.substring(curr, textarea.length);
-        textarea.setSelectionRange(curr + 1, curr + 1);
-    }
-    if (e.key.length === 1) {
-        let aezakmi = document.querySelectorAll(`.${e.code} div span`);
-        let keyCurr;
-        aezakmi.forEach((el) => {
-            if (el.classList.contains('hidden')) {
+        case 'ShiftLeft': {
+            shiftCaps(e);
+            return;
+        }
+        case 'ShiftRight': {
+            shiftCaps(e);
+            return;
+        }
+        case 'ArrowLeft': {
+            textarea.selectionEnd = (curr - 1);
+            return;
+        }
+        case 'ArrowRight': {
+            textarea.selectionStart = (curr + 1);
+            return;
+        }
+        case 'ArrowDown': {
+            if (textarea.value.length > (width / 12.41)) {
+                textarea.selectionStart = ((curr) + (Math.floor(width / 12.41)));
+            }
+            return;
+        }
+        case 'ArrowUp': {
+            if (textarea.value.length > (width / 12.41) && curr > (width / 12.41)) {
+                textarea.selectionEnd = ((curr) - (Math.floor(width / 12.41)));
+            }
+            return;
+        }
+        case 'Enter': {
+            textarea.value = textarea.value.substring(0, curr) + '\n' +
+                textarea.value.substring(curr, textarea.length);
+            textarea.setSelectionRange(curr + 1, curr + 1);
+            return;
+        }
+        case 'Tab': {
+            textarea.value = textarea.value.substring(0, curr) + '\t' +
+                textarea.value.substring(curr, textarea.length);
+            textarea.setSelectionRange(curr + 1, curr + 1);
+            return;
+        }
+        default: {
+            if (e.code === 'ShiftLeft' || e.code === 'AltLeft' || e.code == 'ShiftRight') {
                 return;
             }
-            keyCurr = el.textContent;
-        });
-        textarea.value = textarea.value.substring(0, curr) + keyCurr +
-            textarea.value.substring(curr, textarea.length);
-        textarea.setSelectionRange(curr + 1, curr + 1);
+
+            if (e.key.length === 1) {
+                let aezakmi = document.querySelectorAll(`.${e.code} div span`);
+                let keyCurr;
+                aezakmi.forEach((el) => {
+                    if (el.classList.contains('hidden')) {
+                        return;
+                    }
+                    keyCurr = el.textContent;
+                });
+                textarea.value = textarea.value.substring(0, curr) + keyCurr +
+                    textarea.value.substring(curr, textarea.length);
+                textarea.setSelectionRange(curr + 1, curr + 1);
+            }
+        }
     }
+
+
 });
 
 
 body.addEventListener('keyup', function (e) {
     const key = document.querySelector(`.${e.code}`);
     pressBtn = '';
+    shiftPress = '';
     if (key !== null) {
         key.classList.remove('active');
     }
@@ -1100,7 +1136,6 @@ runOnKeys(
         }
         if (keyboardKey.className == 'rus') {
             createListWithInnerHTML(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
-            console.log('asdasdad');
             save();
         }
     },
