@@ -83,12 +83,18 @@ html {
 }
 
 .keyboard .key:active {
-  background-color: rgba(37, 37, 37, 0.46);
+  background-color: rgba(138, 138, 138, 0.46);
   border: 3px solid rgba(183, 183, 183, 0.92);
   border-radius: 12px 0 12px 0;
 }
 .keyboard .key.active {
-  background-color: rgba(37, 37, 37, 0.46);
+  background-color: rgba(138, 138, 138, 0.46);
+  border: 3px solid rgba(183, 183, 183, 0.92);
+  border-radius: 12px 0 12px 0;
+}
+
+.keyboard .key.Caps {
+  background-color: rgba(138, 138, 138, 0.46);
   border: 3px solid rgba(183, 183, 183, 0.92);
   border-radius: 12px 0 12px 0;
 }

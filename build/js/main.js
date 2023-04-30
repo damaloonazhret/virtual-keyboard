@@ -857,7 +857,6 @@ const createListWithInnerHTMLRus = (row1, row2, row3, row4, row5) => {
 };
 
 
-
 function getCaretPos(obj) {
     obj.focus();
     if (obj.selectionStart) return obj.selectionStart;
@@ -878,26 +877,24 @@ const rus = document.querySelectorAll('.rus');
 
 
 keyboard.addEventListener('click', function (e) {
-    const keyboardKey = document.querySelector('.keyboard--key div');
-    if (e.target.textContent == 'Backspace') {
+    if (e.target.textContent.trim() == 'Backspace') {
         const curr = getCaretPos(textarea);
         textarea.value = textarea.value.substring(0, curr - 1) +
             textarea.value.substring(curr, textarea.length);
         textarea.setSelectionRange(curr - 1, curr - 1);
         return;
     }
-    if (e.target.textContent == 'Del') {
+    if (e.target.textContent.trim() == 'Del') {
         const curr = getCaretPos(textarea);
         textarea.value = textarea.value.substring(0, curr) +
             textarea.value.substring(curr + 1, textarea.length);
         textarea.setSelectionRange(curr, curr);
         return;
     }
-    if (e.target.textContent == 'CapsLock') {
+    if (e.target.textContent.trim() == 'CapsLock') {
         document.querySelector(`.${e.target.className}`).classList.add('active');
     }
-    if (e.target.textContent == 'Shift'){
-        console.log(document.querySelectorAll('.caseUp '));
+    if (e.target.textContent.trim() == 'Shift') {
         document.querySelectorAll('.caseUp ').forEach(el => {
             el.classList.remove('hidden');
         });
@@ -905,66 +902,79 @@ keyboard.addEventListener('click', function (e) {
             el.classList.add('hidden');
         });
     }
-    if (e.target.textContent == 'Enter'){
+    if (e.target.textContent.trim() == 'Enter') {
         textarea.focus();
-        console.log('Enter');
         textarea.value += '\n';
     }
-    if (e.target.textContent == '◄') {
+    if (e.target.textContent.trim() == '◄') {
         let curr = getCaretPos(textarea);
-        // console.log(curr);
         textarea.selectionEnd = (curr - 1);
         return;
     }
-    if (e.target.textContent == '►') {
+    if (e.target.textContent.trim() == '►') {
         let curr = getCaretPos(textarea);
         textarea.selectionStart = (curr + 1);
         return;
     }
-    if (e.target.textContent == '▼') {
+    if (e.target.textContent.trim() == '▼') {
         let width = textarea.offsetWidth;
         let curr = getCaretPos(textarea);
-        console.log(textarea.offsetWidth)
-        console.log(textarea.clientWidth)
-        if(textarea.value.length > (width/12.41)){
-            textarea.selectionStart = ((curr)+((Math.floor(width/12.41))));
+        if (textarea.value.length > (width / 12.41)) {
+            textarea.selectionStart = ((curr) + ((Math.floor(width / 12.41))));
         }
         return;
     }
-    if (e.target.textContent == '▲') {
+    if (e.target.textContent.trim() == '▲') {
         let width = textarea.offsetWidth;
         let curr = getCaretPos(textarea);
-        console.log(textarea.getClientRects())
-        if(textarea.value.length > (width/12.41) && curr > (width/12.41)){
-            textarea.selectionEnd = ((curr)-((Math.floor(width/12.41))));
+        if (textarea.value.length > (width / 12.41) && curr > (width / 12.41)) {
+            textarea.selectionEnd = ((curr) - ((Math.floor(width / 12.41))));
         }
         return;
     }
-    if (e.target.textContent == 'Tab'){
-        textarea.value+= '\t';
+    if (e.target.textContent.trim() == 'Tab') {
+        textarea.value += '\t';
     }
     if (e.target.tagName === 'SPAN' && e.target.textContent.length === 1) {
         textarea.value += e.target.textContent;
     }
 });
 
-document.onclick = function(event) {
+document.onclick = function (event) {
     textarea.focus();
 };
-
+let pressBtn = '';
 body.addEventListener('keydown', function (e) {
+    e.preventDefault();
+    if (pressBtn !== e.code) {
+        if (e.code == 'CapsLock') {
+            let caps = document.querySelector(`.${e.code}`);
+            caps.classList.toggle('Caps');
+            pressBtn = e.code;
+            document.querySelectorAll('.caseUp ').forEach(el => {
+                el.classList.toggle('hidden');
+            });
+            document.querySelectorAll('.caseDown ').forEach(el => {
+                el.classList.toggle('hidden');
+            });
+            return;
+        }
+    }
     let curr = getCaretPos(textarea);
     const key = document.querySelector(`.${e.code}`);
-    if (key !== null) {
+    if (key !== null && key.textContent.trim() !== 'CapsLock') {
         key.classList.add('active');
     }
+
     if (e.code == 'Backspace') {
         textarea.value = textarea.value.substring(0, curr - 1) +
             textarea.value.substring(curr, textarea.length);
         textarea.setSelectionRange(curr - 1, curr - 1);
         return;
     }
-    if (e.code == 'Del') {
+    console.log(e.code)
+    if (e.code == 'Delete') {
+        console.log('asd')
         textarea.value = textarea.value.substring(0, curr) +
             textarea.value.substring(curr + 1, textarea.length);
         textarea.setSelectionRange(curr, curr);
@@ -990,45 +1000,46 @@ body.addEventListener('keydown', function (e) {
     if (e.code === 'ArrowDown') {
         let width = textarea.offsetWidth;
         let curr = getCaretPos(textarea);
-        if(textarea.value.length > (width/12.41)){
-            textarea.selectionStart = ((curr)+(Math.floor(width/12.41)));
+        if (textarea.value.length > (width / 12.41)) {
+            textarea.selectionStart = ((curr) + (Math.floor(width / 12.41)));
         }
     }
     if (e.code === 'ArrowUp') {
         let width = textarea.offsetWidth;
         let curr = getCaretPos(textarea);
-        if(textarea.value.length > (width/12.41) && curr > (width/12.41)){
-            textarea.selectionEnd = ((curr)-(Math.floor(width/12.41)));
+        if (textarea.value.length > (width / 12.41) && curr > (width / 12.41)) {
+            textarea.selectionEnd = ((curr) - (Math.floor(width / 12.41)));
         }
     }
-    if (e.code === 'Enter'){
+    if (e.code === 'Enter') {
         textarea.value = textarea.value.substring(0, curr) + '\n' +
             textarea.value.substring(curr, textarea.length);
-        textarea.setSelectionRange(curr+1, curr+1);
+        textarea.setSelectionRange(curr + 1, curr + 1);
     }
-    if (e.code == 'Tab'){
+    if (e.code == 'Tab') {
         textarea.value = textarea.value.substring(0, curr) + '\t' +
             textarea.value.substring(curr, textarea.length);
-        textarea.setSelectionRange(curr+1, curr+1);
+        textarea.setSelectionRange(curr + 1, curr + 1);
     }
     if (e.key.length === 1) {
         let aezakmi = document.querySelectorAll(`.${e.code} div span`);
         let keyCurr;
-        aezakmi.forEach((el)=> {
-            if(el.classList.contains('hidden')){
+        aezakmi.forEach((el) => {
+            if (el.classList.contains('hidden')) {
                 return;
             }
             keyCurr = el.textContent;
         });
         textarea.value = textarea.value.substring(0, curr) + keyCurr +
             textarea.value.substring(curr, textarea.length);
-        textarea.setSelectionRange(curr+1, curr+1);
+        textarea.setSelectionRange(curr + 1, curr + 1);
     }
 });
 
 
 body.addEventListener('keyup', function (e) {
     const key = document.querySelector(`.${e.code}`);
+    pressBtn = '';
     if (key !== null) {
         key.classList.remove('active');
     }
@@ -1043,20 +1054,20 @@ body.addEventListener('keyup', function (e) {
 });
 
 
-function save () {
+function save() {
     localStorage.setItem('test', '1');
 }
-function saveEng () {
+
+function saveEng() {
     localStorage.setItem('test', '2');
 }
 
-if(localStorage.getItem('test') == 2){
+if (localStorage.getItem('test') == 2) {
     createListWithInnerHTMLRus(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
 }
-if(localStorage.getItem('test') == 1){
+if (localStorage.getItem('test') == 1) {
     createListWithInnerHTML(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
 }
-
 
 
 function runOnKeys(func, ...codes) {
@@ -1083,16 +1094,16 @@ function runOnKeys(func, ...codes) {
 runOnKeys(
     () => {
         // setTimeout(() => {
-            let keyboardKey = document.querySelector('.keyboard--key div');
-            if (keyboardKey.className == 'eng') {
-                createListWithInnerHTMLRus(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
-                saveEng();
-            }
-            if (keyboardKey.className == 'rus') {
-                createListWithInnerHTML(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
-        console.log('asdasdad');
+        let keyboardKey = document.querySelector('.keyboard--key div');
+        if (keyboardKey.className == 'eng') {
+            createListWithInnerHTMLRus(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
+            saveEng();
+        }
+        if (keyboardKey.className == 'rus') {
+            createListWithInnerHTML(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
+            console.log('asdasdad');
             save();
-            }
+        }
         // }, 300);
 
     },
