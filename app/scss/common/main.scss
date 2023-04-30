@@ -3,7 +3,7 @@ html {
 }
 
 input[type="text"], textarea {
-  background-color : rgba(211, 211, 211, 0);
+  background-color: rgba(211, 211, 211, 0);
   border: 2px solid rgb(0, 0, 0);
 }
 
@@ -14,7 +14,10 @@ input[type="text"], textarea {
   margin: 20px auto 20px;
   font-size: 22px;
   resize: none;
-  &::-webkit-scrollbar {width:0px;}
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 }
 
 .keyboard {
@@ -31,18 +34,18 @@ input[type="text"], textarea {
 .shiftCaps,
 .caps {
   display: block;
-  min-height: 40px
+  min-height: 40px;
 }
 
 .hidden {
-  display: none
+  display: none;
 }
 
 .description,
 .language,
 .title {
   margin: 10px auto;
-  text-align: center
+  text-align: center;
 }
 
 .title {
@@ -59,8 +62,8 @@ input[type="text"], textarea {
   margin-bottom: 8px;
 }
 
-.keyboard  {
-  .key{
+.keyboard {
+  .key {
     float: left;
     width: 40px;
     height: 40px;
@@ -74,15 +77,18 @@ input[type="text"], textarea {
     cursor: pointer;
     user-select: none;
     transition: all ease-in-out 0.2s;
-    &:hover{
+
+    &:hover {
       background: #8f8f8f;
     }
+
     &:active {
       background-color: rgba(138, 138, 138, 0.46);
       border: 3px solid rgba(183, 183, 183, 0.92);
       border-radius: 12px 0 12px 0;
     }
-    &.active, &.Caps{
+
+    &.active, &.Caps {
       background-color: rgba(138, 138, 138, 0.46);
       border: 3px solid rgba(183, 183, 183, 0.92);
       border-radius: 12px 0 12px 0;
@@ -107,28 +113,28 @@ input[type="text"], textarea {
 .keyboard .Tab,
 .keyboard .MetaLeft {
   font-weight: 600;
-  background-color: #383838
+  background-color: #383838;
 }
 
 .keyboard .Tab {
-  width: 50px
+  width: 50px;
 }
 
 .keyboard .Backspace,
 .keyboard .CapsLock,
 .keyboard .ShiftLeft {
-  width: 100px
+  width: 100px;
 }
 
 .keyboard .Delete {
-  width: 44px
+  width: 44px;
 }
 
 .keyboard .Enter,
 .keyboard .ShiftRight {
-  width: 86px
+  width: 86px;
 }
 
 .keyboard .Space {
-  width: 330px
+  width: 330px;
 }
