@@ -1093,7 +1093,6 @@ function runOnKeys(func, ...codes) {
 
 runOnKeys(
     () => {
-        // setTimeout(() => {
         let keyboardKey = document.querySelector('.keyboard--key div');
         if (keyboardKey.className == 'eng') {
             createListWithInnerHTMLRus(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
@@ -1104,8 +1103,6 @@ runOnKeys(
             console.log('asdasdad');
             save();
         }
-        // }, 300);
-
     },
     "ControlLeft",
     "AltLeft"

@@ -1,3 +1,12 @@
+html {
+  background-color: #c2c2c2;
+}
+
+input[type="text"], textarea {
+  background-color : rgba(211, 211, 211, 0);
+  border: 2px solid rgb(0, 0, 0);
+}
+
 .textarea {
   display: block;
   width: 720px;
@@ -8,11 +17,6 @@
   &::-webkit-scrollbar {width:0px;}
 }
 
-input[type="text"], textarea {
-  background-color : rgba(211, 211, 211, 0);
-  border: 2px solid rgb(0, 0, 0);
-}
-
 .keyboard {
   width: 720px;
   margin: 0 auto;
@@ -20,10 +24,6 @@ input[type="text"], textarea {
   background: rgba(0, 0, 0, 0.59);
   border: 3px solid #222222;
   border-radius: 5px;
-}
-
-html {
-  background-color: #c2c2c2;
 }
 
 .caseDown,
@@ -52,7 +52,6 @@ html {
   -webkit-text-fill-color: rgba(101, 134, 177, 0.8)
 }
 
-
 .keyboard .row {
   clear: both;
   width: 100%;
@@ -60,43 +59,35 @@ html {
   margin-bottom: 8px;
 }
 
-
-.keyboard .key {
-  float: left;
-  width: 40px;
-  height: 40px;
-  margin-left: 6px;
-  font-weight: 500;
-  line-height: 40px;
-  text-align: center;
-  color: #ffffff;
-  background: rgba(58, 4, 4, 0);
-  border: 3px solid #ffc4c4;
-  cursor: pointer;
-  user-select: none;
-  //transition: border-radius 0.3s, background-color 0.3s
-  transition: all ease-in-out 0.2s;
-}
-
-.keyboard .key:hover {
-  background: #8f8f8f
-}
-
-.keyboard .key:active {
-  background-color: rgba(138, 138, 138, 0.46);
-  border: 3px solid rgba(183, 183, 183, 0.92);
-  border-radius: 12px 0 12px 0;
-}
-.keyboard .key.active {
-  background-color: rgba(138, 138, 138, 0.46);
-  border: 3px solid rgba(183, 183, 183, 0.92);
-  border-radius: 12px 0 12px 0;
-}
-
-.keyboard .key.Caps {
-  background-color: rgba(138, 138, 138, 0.46);
-  border: 3px solid rgba(183, 183, 183, 0.92);
-  border-radius: 12px 0 12px 0;
+.keyboard  {
+  .key{
+    float: left;
+    width: 40px;
+    height: 40px;
+    margin-left: 6px;
+    font-weight: 500;
+    line-height: 40px;
+    text-align: center;
+    color: #ffffff;
+    background: rgba(58, 4, 4, 0);
+    border: 3px solid #ffc4c4;
+    cursor: pointer;
+    user-select: none;
+    transition: all ease-in-out 0.2s;
+    &:hover{
+      background: #8f8f8f;
+    }
+    &:active {
+      background-color: rgba(138, 138, 138, 0.46);
+      border: 3px solid rgba(183, 183, 183, 0.92);
+      border-radius: 12px 0 12px 0;
+    }
+    &.active, &.Caps{
+      background-color: rgba(138, 138, 138, 0.46);
+      border: 3px solid rgba(183, 183, 183, 0.92);
+      border-radius: 12px 0 12px 0;
+    }
+  }
 }
 
 .keyboard .AltLeft,
