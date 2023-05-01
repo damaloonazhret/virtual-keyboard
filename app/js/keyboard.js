@@ -197,8 +197,9 @@ keyboard.addEventListener('click', function (e) {
             return;
         }
         default: {
-            // if (e.target.tagName === 'SPAN' && e.target.textContent.length === 1) {
-            if (true) {
+                console.log(e.target.textContent.trim())
+            if (e.target.tagName === 'SPAN' && e.target.textContent.length <= 2) {
+            // if (true) {
                 console.log(e.target.textContent.trim())
                 // let aezakmi = document.querySelectorAll(`.${e.code} div span`);
                 // let keyCurr;
@@ -208,15 +209,19 @@ keyboard.addEventListener('click', function (e) {
                 //     }
                 //     keyCurr = el.textContent;
                 // });
-                // textarea.value = textarea.value.substring(0, curr) + keyCurr +
-                //     textarea.value.substring(curr, textarea.length);
-                // textarea.setSelectionRange(curr + 1, curr + 1);
+                textarea.value = textarea.value.substring(0, curr) + e.target.textContent.trim() +
+                    textarea.value.substring(curr, textarea.length);
+                textarea.setSelectionRange(curr + 1, curr + 1);
             }
         }
     }
 });
 let shiftPress = '';
 const shiftCaps = (e) => {
+    let shift = document.querySelector('.ShiftLeft');
+    if (shift.classList.contains('active')){
+        return;
+    }
     if (shiftPress !== e.code) {
         shiftPress = e.code;
         if (e.target.textContent.trim() == 'Shift' ||
