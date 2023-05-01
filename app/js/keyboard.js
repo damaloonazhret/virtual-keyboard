@@ -211,7 +211,6 @@ keyboard.addEventListener('click', function (e) {
             shiftPress = '';
             const caps = document.querySelector(`.${e.target.textContent.trim()}`);
             caps.classList.toggle('Caps');
-            // pressBtn = e.code;
             shiftCaps(e);
             return;
         }
@@ -275,9 +274,12 @@ document.onclick = function (event) {
 let pressBtn = '';
 const pressedKey = {};
 
-body.addEventListener('keydown', function (e) {
+body.addEventListener('keydown', function (e){
     if (pressedKey[e.code]) return;
     pressedKey[e.code] = true;
+});
+
+body.addEventListener('keydown', function (e) {
 
     e.preventDefault();
 
@@ -378,7 +380,7 @@ body.addEventListener('keydown', function (e) {
         }
 
         case 'Enter': {
-            textarea.value = textarea.value.substring(0, curr) + '\n' +
+            textarea.value = textarea.value.substring(0, curr) + '\u0009' +
                 textarea.value.substring(curr, textarea.length);
             textarea.setSelectionRange(curr + 1, curr + 1);
             return;
@@ -419,6 +421,9 @@ body.addEventListener('keydown', function (e) {
 
 
 body.addEventListener('keyup', function (e) {
+
+    e.preventDefault();
+
     if (e.key == 'AudioVolumeMute' ||
         e.key == 'AudioVolumeDown' ||
         e.key == 'AudioVolumeUp' ||
