@@ -716,6 +716,7 @@ const ctrlRow = [
         name: 'ControlRight',
     },
 ];
+
 const body = document.querySelector('body');
 
 const header = document.createElement('header');
@@ -876,6 +877,7 @@ const createListWithInnerHTML = (row1, row2, row3, row4, row5) => {
 
 createListWithInnerHTMLRus(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
 
+
 function getCaretPos(obj) {
 
     obj.focus();
@@ -1025,18 +1027,10 @@ document.onclick = function (event) {
 let pressBtn = '';
 let pressedKey = {};
 
-
 body.addEventListener('keydown', function (e) {
 
     if (pressedKey[e.code]) return;
     pressedKey[e.code] = true;
-
-});
-
-
-
-
-body.addEventListener('keydown', function (e) {
 
     e.preventDefault();
 
@@ -1154,7 +1148,9 @@ body.addEventListener('keydown', function (e) {
 
         default: {
 
-            if (e.code === 'AltLeft' || e.code.substring(0, 3) == 'Num') {
+            if (e.code === 'AltLeft' ||
+                e.code.substring(0, 3) == 'Num' ||
+                e.code == 'IntlBackslash') {
                 return;
             }
 
