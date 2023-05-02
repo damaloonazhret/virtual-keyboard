@@ -487,9 +487,10 @@ body.addEventListener('keyup', function (e) {
     }
 });
 
-if (localStorage.getItem('test') === 2) {
+
+if (localStorage.getItem('test') === '2') {
     createListWithInnerHTMLRus(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
 }
-if (localStorage.getItem('test') === 1) {
+if (localStorage.getItem('test') === '1') {
     createListWithInnerHTML(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
 }
