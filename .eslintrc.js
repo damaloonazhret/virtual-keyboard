@@ -1,15 +1,15 @@
 module.exports = {
-  'env': {
-    'browser': true,
-    'es2021': true,
+  env: {
+    browser: true,
+    es2021: true,
   },
-  'extends': 'google',
-  'overrides': [
+  extends: 'airbnb-base',
+  overrides: [
   ],
-  'parserOptions': {
-    'ecmaVersion': 'latest',
+  parserOptions: {
+    ecmaVersion: 'latest',
   },
-  'rules': {
-    "require-jsdoc" : 0
+  rules: {
+  "max-classes-per-file": ["error", 2]
   },
 };

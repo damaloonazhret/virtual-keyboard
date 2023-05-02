@@ -43,7 +43,7 @@ keyboard.appendChild(keyboardRow5);
 
 textarea.focus();
 
-const key = (num) => {
+const returnKey = (num) => {
     if (num.shiftCaps === num.caseDownRu) {
         return `
     <div class="keyboard--key key ${num.name}">
@@ -95,8 +95,7 @@ class KeyRus {
     }
 
     create() {
-        const buranRus = this.num.map(keyRu).join(' ');
-        return buranRus;
+        return this.num.map(keyRu).join(' ');
     }
 }
 
@@ -106,8 +105,7 @@ class KeyEn {
     }
 
     create() {
-        const buran = this.num.map(key).join(' ');
-        return buran;
+        return this.num.map(returnKey).join(' ');
     }
 }
 
@@ -149,6 +147,26 @@ function getCaretPos(obj) {
     return 0;
 }
 
+let shiftPress = '';
+
+const shiftCaps = (e) => {
+    if (shiftPress !== e.code) {
+        shiftPress = e.code;
+        if (e.target.textContent.trim() === 'Shift' ||
+            e.code === 'ShiftLeft' ||
+            e.code === 'ShiftRight' ||
+            e.code === 'CapsLock' ||
+            e.target.textContent.trim() === 'CapsLock') {
+            document.querySelectorAll('.caseUp ').forEach((el) => {
+                el.classList.toggle('hidden');
+            });
+            document.querySelectorAll('.caseDown ').forEach((el) => {
+                el.classList.toggle('hidden');
+            });
+        }
+    }
+};
+
 
 keyboard.addEventListener('click', function (e) {
     e.preventDefault();
@@ -173,7 +191,6 @@ keyboard.addEventListener('click', function (e) {
             textarea.value = textarea.value.substring(0, curr) + '\n' +
                 textarea.value.substring(curr, textarea.length);
             textarea.setSelectionRange(curr + 1, curr + 1);
-            // textarea.value += '\n';
             textarea.focus();
             return;
         }
@@ -219,14 +236,14 @@ keyboard.addEventListener('click', function (e) {
         }
 
         default: {
-            if (e.target.tagName === 'SPAN' && e.target.textContent.length == 1) {
+            if (e.target.tagName === 'SPAN' && e.target.textContent.length === 1) {
                 textarea.value = textarea.value.substring(0, curr) +
                     e.target.textContent.trim() +
                     textarea.value.substring(curr, textarea.length);
                 textarea.setSelectionRange(curr + 1, curr + 1);
             }
 
-            if (e.target.className.substring(18) == 'Space') {
+            if (e.target.className.substring(18) === 'Space') {
                 textarea.value = textarea.value.substring(0, curr) + ' ' +
                     textarea.value.substring(curr, textarea.length);
                 textarea.setSelectionRange(curr + 1, curr + 1);
@@ -236,48 +253,29 @@ keyboard.addEventListener('click', function (e) {
     }
 });
 
-let shiftPress = '';
-
-const shiftCaps = (e) => {
-    if (shiftPress !== e.code) {
-        shiftPress = e.code;
-        if (e.target.textContent.trim() == 'Shift' ||
-            e.code == 'ShiftLeft' ||
-            e.code == 'ShiftRight' ||
-            e.code == 'CapsLock' ||
-            e.target.textContent.trim() == 'CapsLock') {
-            document.querySelectorAll('.caseUp ').forEach((el) => {
-                el.classList.toggle('hidden');
-            });
-            document.querySelectorAll('.caseDown ').forEach((el) => {
-                el.classList.toggle('hidden');
-            });
-        }
-    }
-};
 
 keyboard.addEventListener('mousedown', function (e) {
-    if (e.target.textContent.trim() == 'Shift') {
+    if (e.target.textContent.trim() === 'Shift') {
         shiftPress = '';
         shiftCaps(e);
     }
 });
 
 keyboard.addEventListener('mouseup', function (e) {
-    if (e.target.textContent.trim() == 'Shift') {
+    if (e.target.textContent.trim() === 'Shift') {
         shiftPress = '';
         shiftCaps(e);
     }
 });
 
-document.onclick = function (event) {
+document.addEventListener('click', () => {
     textarea.focus();
-};
+});
 
 let pressBtn = '';
 const pressedKey = {};
 
-body.addEventListener('keydown', function (e){
+body.addEventListener('keydown', function (e) {
     if (pressedKey[e.code]) return;
     pressedKey[e.code] = true;
 });
@@ -286,30 +284,30 @@ body.addEventListener('keydown', function (e) {
 
     e.preventDefault();
 
-    if (e.key == 'AudioVolumeMute' ||
-        e.key == 'AudioVolumeDown' ||
-        e.key == 'AudioVolumeUp' ||
-        e.key == 'LaunchApplication2'
+    if (e.key === 'AudioVolumeMute' ||
+        e.key === 'AudioVolumeDown' ||
+        e.key === 'AudioVolumeUp' ||
+        e.key === 'LaunchApplication2'
     ) {
         return;
     }
 
     if (pressBtn !== e.code) {
-        if (e.code == 'CapsLock') {
+        if (e.code === 'CapsLock') {
             const caps = document.querySelector(`.${e.code}`);
             caps.classList.toggle('Caps');
             pressBtn = e.code;
             shiftCaps(e);
             return;
         }
-        if (e.code == 'ControlLeft') {
+        if (e.code === 'ControlLeft') {
             const controlLeft = document.querySelector(`.${e.code}`);
             controlLeft.classList.add('change');
             controlLeft.classList.add('active');
             pressBtn = e.code;
             return;
         }
-        if (e.code == 'AltLeft') {
+        if (e.code === 'AltLeft') {
             const altLeft = document.querySelector(`.${e.code}`);
             altLeft.classList.add('change');
             altLeft.classList.add('active');
@@ -398,8 +396,8 @@ body.addEventListener('keydown', function (e) {
 
         default: {
             if (e.code === 'AltLeft' ||
-                e.code.substring(0, 3) == 'Num' ||
-                e.code == 'IntlBackslash') {
+                e.code.substring(0, 3) === 'Num' ||
+                e.code === 'IntlBackslash') {
                 return;
             }
 
@@ -422,15 +420,22 @@ body.addEventListener('keydown', function (e) {
     }
 });
 
+function save() {
+    localStorage.setItem('test', '1');
+}
+
+function saveEng() {
+    localStorage.setItem('test', '2');
+}
 
 body.addEventListener('keyup', function (e) {
 
     e.preventDefault();
 
-    if (e.key == 'AudioVolumeMute' ||
-        e.key == 'AudioVolumeDown' ||
-        e.key == 'AudioVolumeUp' ||
-        e.key == 'LaunchApplication2'
+    if (e.key === 'AudioVolumeMute' ||
+        e.key === 'AudioVolumeDown' ||
+        e.key === 'AudioVolumeUp' ||
+        e.key === 'LaunchApplication2'
     ) {
         return;
     }
@@ -440,7 +445,7 @@ body.addEventListener('keyup', function (e) {
     pressBtn = '';
     shiftPress = '';
 
-    if (e.code == 'ShiftLeft' || e.code == 'ShiftRight') {
+    if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
         shiftCaps(e);
         shiftPress = '';
     }
@@ -449,12 +454,12 @@ body.addEventListener('keyup', function (e) {
     if (pressedKey.ControlLeft && pressedKey.AltLeft) {
         const keyboardKey = document.querySelector('.keyboard--key div');
 
-        if (keyboardKey.className == 'eng') {
+        if (keyboardKey.className === 'eng') {
             createListWithInnerHTMLRus(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
             saveEng();
         }
 
-        if (keyboardKey.className == 'rus') {
+        if (keyboardKey.className === 'rus') {
             createListWithInnerHTML(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
             save();
         }
@@ -482,18 +487,9 @@ body.addEventListener('keyup', function (e) {
     }
 });
 
-
-function save() {
-    localStorage.setItem('test', '1');
-}
-
-function saveEng() {
-    localStorage.setItem('test', '2');
-}
-
-if (localStorage.getItem('test') == 2) {
+if (localStorage.getItem('test') === 2) {
     createListWithInnerHTMLRus(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
 }
-if (localStorage.getItem('test') == 1) {
+if (localStorage.getItem('test') === 1) {
     createListWithInnerHTML(numsRow, tabRow, capsRow, shiftRow, ctrlRow);
 }
