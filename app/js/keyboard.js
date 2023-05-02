@@ -170,7 +170,10 @@ keyboard.addEventListener('click', function (e) {
         }
 
         case 'Enter': {
-            textarea.value += '\n';
+            textarea.value = textarea.value.substring(0, curr) + '\n' +
+                textarea.value.substring(curr, textarea.length);
+            textarea.setSelectionRange(curr + 1, curr + 1);
+            // textarea.value += '\n';
             textarea.focus();
             return;
         }
@@ -186,15 +189,15 @@ keyboard.addEventListener('click', function (e) {
         }
 
         case '▼': {
-            if (textarea.value.length > (width / 12.41)) {
-                textarea.selectionStart = ((curr) + ((Math.floor(width / 12.41))));
+            if (textarea.value.length > (width / 13.5)) {
+                textarea.selectionStart = ((curr) + ((Math.floor(width / 13.5))));
             }
             return;
         }
 
         case '▲': {
-            if (textarea.value.length > (width / 12.41) && curr > (width / 12.41)) {
-                textarea.selectionEnd = ((curr) - ((Math.floor(width / 12.41))));
+            if (textarea.value.length > (width / 13.5) && curr > (width / 13.5)) {
+                textarea.selectionEnd = ((curr) - ((Math.floor(width / 13.5))));
             }
             return;
         }
@@ -366,21 +369,21 @@ body.addEventListener('keydown', function (e) {
         }
 
         case 'ArrowDown': {
-            if (textarea.value.length > (width / 12.41)) {
-                textarea.selectionStart = ((curr) + (Math.floor(width / 12.41)));
+            if (textarea.value.length > (width / 13.5)) {
+                textarea.selectionStart = ((curr) + (Math.floor(width / 13.5)));
             }
             return;
         }
 
         case 'ArrowUp': {
-            if (textarea.value.length > (width / 12.41) && curr > (width / 12.41)) {
-                textarea.selectionEnd = ((curr) - (Math.floor(width / 12.41)));
+            if (textarea.value.length > (width / 13.5) && curr > (width / 13.5)) {
+                textarea.selectionEnd = ((curr) - (Math.floor(width / 13.5)));
             }
             return;
         }
 
         case 'Enter': {
-            textarea.value = textarea.value.substring(0, curr) + '\u0009' +
+            textarea.value = textarea.value.substring(0, curr) + '\n' +
                 textarea.value.substring(curr, textarea.length);
             textarea.setSelectionRange(curr + 1, curr + 1);
             return;
